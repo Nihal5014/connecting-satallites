@@ -1,0 +1,39 @@
+import pgzrun
+import random
+satallites = []
+WIDTH = 800
+HEIGHT = 600
+index = 0
+for i in range(8):
+    satallite = Actor("satallites image")
+    satallite.pos = (random.randint(50,750),random.randint(50,550))
+    satallites.append(satallite) 
+lines  = []
+# store coordinates in (lines) - list
+def draw():
+    number= 1
+    screen.blit("galaxy image",(0,0))
+    for satallite in satallites:
+        satallite.draw()
+        screen.draw.text(str(number),(satallite.x,satallite.y+30))
+        number = number + 1
+    for line in lines:
+      screen.draw.line(line[0],line[1],'purple')
+
+
+def on_mouse_down(pos):
+    global index 
+    global lines
+    # glo   bal vairables are accessable in all the functions and the variables you create inside the function is a local variable.
+    if satallites[index].collidepoint(pos):
+        if index > 0:
+            lines.append((satallites[index - 1].pos,satallites[index].pos))
+        index = index + 1
+    else:
+        index = 0
+        lines.clear()
+
+def update():
+    pass
+
+pgzrun.go()
