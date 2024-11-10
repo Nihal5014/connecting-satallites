@@ -1,9 +1,15 @@
 import pgzrun
 import random
+import time
+
 satallites = []
 WIDTH = 800
 HEIGHT = 600
 index = 0
+gameover =  False
+start  = time.time()
+game_complete =  False
+total  = 0
 for i in range(8):
     satallite = Actor("satallites image")
     satallite.pos = (random.randint(50,750),random.randint(50,550))
@@ -11,29 +17,50 @@ for i in range(8):
 lines  = []
 # store coordinates in (lines) - list
 def draw():
-    number= 1
-    screen.blit("galaxy image",(0,0))
-    for satallite in satallites:
-        satallite.draw()
-        screen.draw.text(str(number),(satallite.x,satallite.y+30))
-        number = number + 1
-    for line in lines:
-      screen.draw.line(line[0],line[1],'purple')
+    global game_complete
+    global total
+    if  gameover == True:
+        screen.fill("red")
+        screen.draw.text("GAMEOVER",(400,300),color='dark blue')
+
+    else:
+        if index == 8:         
+            game_complete = True
+        else:
+            total = time.time() - start
+        number= 1
+        screen.blit("galaxy image",(0,0))
+        for satallite in satallites:
+            satallite.draw()
+            screen.draw.text(str(number),(satallite.x,satallite.y+30))
+            number = number + 1
+        for line in lines:
+            screen.draw.line(line[0],line[1],'purple')
+        
+        screen.draw.text(str(round(total,0)),(10,10))
+      
+
 
 
 def on_mouse_down(pos):
     global index 
     global lines
-    # glo   bal vairables are accessable in all the functions and the variables you create inside the function is a local variable.
-    if satallites[index].collidepoint(pos):
-        if index > 0:
-            lines.append((satallites[index - 1].pos,satallites[index].pos))
-        index = index + 1
-    else:
-        index = 0
-        lines.clear()
+    global gameover 
+    # global vairables are accessable in all the functions and the variables you create inside the function is a local variable.
+    if game_complete == False: 
+        if satallites[index].collidepoint(pos):
+            if index > 0:
+                lines.append((satallites[index - 1].pos,satallites[index].pos))
+            index = index + 1
+        else:   
+            gameover = True
 
 def update():
     pass
+
+
+
+
+
 
 pgzrun.go()
